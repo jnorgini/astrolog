@@ -3,29 +3,33 @@ package com.norgini.enums;
 import swisseph.SweConst;
 
 public enum FixedPlanet {
+    LUA(SweConst.SE_MOON, "Lua"),
+    SOL(SweConst.SE_SUN, "Sol"),
+    MERCURIO(SweConst.SE_MERCURY, "Mercúrio"),
+    VENUS(SweConst.SE_VENUS, "Vênus"),
+    MARTE(SweConst.SE_MARS, "Marte"),
+    JUPITER(SweConst.SE_JUPITER, "Júpiter"),
+    SATURNO(SweConst.SE_SATURN, "Saturno"),
+    URANO(SweConst.SE_URANUS, "Urano"),
+    NETUNO(SweConst.SE_NEPTUNE, "Netuno"),
+    PLUTAO(SweConst.SE_PLUTO, "Plutão"),
+    NODO_VERDADEIRO(SweConst.SE_TRUE_NODE, "Nódulo Verdadeiro"),
+    LILITH(SweConst.SE_MEAN_APOG, "Lilith (Lua Negra)"); 
 
-	SUN(SweConst.SE_SUN, "Sun"), 
-	MOON(SweConst.SE_MOON, "Moon"), 
-	MERCURY(SweConst.SE_MERCURY, "Mercury"),
-	VENUS(SweConst.SE_VENUS, "Venus"), 
-	MARS(SweConst.SE_MARS, "Mars"), 
-	JUPITER(SweConst.SE_JUPITER, "Jupiter"),
-	SATURN(SweConst.SE_SATURN, "Saturn");
+    private final int id;
+    private final String displayName;
 
-	private final int id;
-	private final String displayName;
+    FixedPlanet(int id, String displayName) {
+        this.id = id;
+        this.displayName = displayName;
+    }
 
-	FixedPlanet(int id, String displayName) {
-		this.id = id;
-		this.displayName = displayName;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public int getId() {
-		return id;
-	}
-
-	public String getDisplayName() {
-		return displayName;
-	}
-
+    public String getDisplayName() {
+        return displayName;
+    }
+    
 }

@@ -24,8 +24,6 @@ public enum ZodiacSign {
 		return displayName;
 	}
 
-	// Método utilitário para buscar o Signo diretamente pelo índice (0 a 11)
-	// calculado pela biblioteca
 	public static ZodiacSign getByIndex(int index) {
 		return values()[index % 12];
 	}
