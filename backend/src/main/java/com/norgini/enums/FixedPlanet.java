@@ -3,6 +3,7 @@ package com.norgini.enums;
 import swisseph.SweConst;
 
 public enum FixedPlanet {
+	
     LUA(SweConst.SE_MOON, "Lua"),
     SOL(SweConst.SE_SUN, "Sol"),
     MERCURIO(SweConst.SE_MERCURY, "Mercúrio"),
