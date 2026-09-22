@@ -4,8 +4,8 @@ import swisseph.SweConst;
 
 public enum FixedPlanet {
 	
+	SOL(SweConst.SE_SUN, "Sol"),
     LUA(SweConst.SE_MOON, "Lua"),
-    SOL(SweConst.SE_SUN, "Sol"),
     MERCURIO(SweConst.SE_MERCURY, "Mercúrio"),
     VENUS(SweConst.SE_VENUS, "Vênus"),
     MARTE(SweConst.SE_MARS, "Marte"),
