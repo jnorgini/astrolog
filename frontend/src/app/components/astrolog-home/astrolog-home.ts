@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { AstrologService } from '../../services/AstrologService';
 import { PlanetPositionResponse } from '../../models/planet-position.model';
+import { PLANET_SYMBOLS, ZODIAC_SYMBOLS } from '../../models/astrolog-symbols.constants';
 
 @Component({
   selector: 'app-astrolog-home',
@@ -11,6 +12,8 @@ import { PlanetPositionResponse } from '../../models/planet-position.model';
 export class AstrologHome {
   private readonly astrologService = inject(AstrologService);
   private readonly today = new Date();
+
+  public readonly planetIcons = PLANET_SYMBOLS;
 
   public readonly day = signal<number>(this.today.getDate());
   public readonly month = signal<number>(this.today.getMonth() + 1);

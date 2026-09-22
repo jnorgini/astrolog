@@ -1,9 +1,10 @@
-<div class="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-white p-4">
+<div class="flex flex-col items-center justify-center py-4 bg-slate-900 text-white p-4">
   <!-- ALTERAÇÃO: Mudado max-w-2xl para max-w-4xl para dar espaço total às tabelas lado a lado -->
   <div class="w-full max-w-4xl p-8 bg-slate-800 rounded-2xl shadow-xl border border-slate-700 text-center">
 
-    <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-purple-500 mb-4">
-      Astrolog Web ✨
+    <h1
+      class="text-4xl font-extrabold text-transparent bg-clip-text bg-linear-to-r p-1 from-cyan-400 to-purple-500 mb-4">
+      Astrolog
     </h1>
 
     <!-- CAMPOS DE DATA E HORÁRIO -->
@@ -55,7 +56,7 @@
       @if (isLoading()) {
       Calculando o céu... 🌌
       } @else {
-      Explore the Sky ♈
+      Céu do Momento 🌌
       }
     </button>
 
@@ -69,9 +70,10 @@
     @if (planetsResult().length > 0) {
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mt-6 border-t border-slate-700/60 pt-5 text-left">
 
-      <!-- SUBTABELA 1: ASTROS -->
-      <div class="overflow-hidden bg-slate-950/40 border border-slate-700 rounded-xl"
-        [class.md:col-span-7]="!hasHiddenHouses()" [class.md:col-span-12]="hasHiddenHouses()">
+      <!-- SUBTABELA 1: ASTROS (LARGURA CONTROLADA PARA NÃO ESTICAR SEM HORÁRIO) -->
+      <div class="overflow-hidden bg-slate-950/40 border border-slate-700 rounded-xl transition-all duration-300"
+        [class.md:col-span-7]="!hasHiddenHouses()" [class.md:col-span-12]="hasHiddenHouses()"
+        [class.max-w-xl]="hasHiddenHouses()" [class.mx-auto]="hasHiddenHouses()">
         <table class="w-full border-collapse table-fixed">
           <thead>
             <tr
@@ -82,7 +84,6 @@
               @if (!hasHiddenHouses()) {
               <th class="p-3 w-1/4">Posição</th>
               }
-              <!-- ALTERAÇÃO: Adicionado w-1/4 para garantir espaço fixo e impedir corte do texto -->
               <th class="p-3 pr-4 text-right w-1/4">Movimento</th>
             </tr>
           </thead>
@@ -90,7 +91,12 @@
             @for (item of planetsResult(); track item.planet) {
             @if (!item.planet.startsWith('Casa') && item.planet !== 'Ascendente') {
             <tr class="hover:bg-slate-800/30 transition">
-              <td class="p-3 pl-4 text-slate-200 font-semibold truncate">{{ item.planet }}</td>
+              <td class="p-3 pl-4 text-slate-200 font-semibold truncate">
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-400 font-normal select-none">{{ planetIcons[item.planet] || '' }}</span>
+                  <span>{{ item.planet }}</span>
+                </div>
+              </td>
               <td class="p-3 text-slate-300 truncate">{{ item.zodiacSign }}</td>
               <td class="p-3 text-cyan-400 font-mono whitespace-nowrap">{{ item.degrees }}</td>
               @if (!hasHiddenHouses()) {
@@ -98,7 +104,6 @@
                 {{ item.house ? 'na casa ' + item.house : '—' }}
               </td>
               }
-              <!-- ALTERAÇÃO: whitespace-nowrap impede que quebre linha ou corte na borda -->
               <td class="p-3 pr-4 text-right font-mono text-[10px] uppercase font-bold tracking-wider whitespace-nowrap"
                 [class.text-amber-400]="item.movement === 'retrógrado'"
                 [class.text-slate-500]="item.movement === 'direto'">
