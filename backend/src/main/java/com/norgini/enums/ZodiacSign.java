@@ -1,18 +1,18 @@
 package com.norgini.enums;
 
 public enum ZodiacSign {
-	ARIES("Aries"), 
-	TAURUS("Taurus"), 
-	GEMINI("Gemini"), 
-	CANCER("Cancer"), 
-	LEO("Leo"), 
-	VIRGO("Virgo"), 
+	ARIES("Áries"), 
+	TAURUS("Touro"), 
+	GEMINI("Gêmeos"), 
+	CANCER("Câncer"), 
+	LEO("Leão"), 
+	VIRGO("Virgem"), 
 	LIBRA("Libra"),
-	SCORPIO("Scorpio"), 
-	SAGITTARIUS("Sagittarius"), 
-	CAPRICORN("Capricorn"), 
-	AQUARIUS("Aquarius"), 
-	PISCES("Pisces");
+	SCORPIO("Escorpião"), 
+	SAGITTARIUS("Sagitário"), 
+	CAPRICORN("Capricórnio"), 
+	AQUARIUS("Aquário"), 
+	PISCES("Peixes");
 
 	private final String displayName;
 
