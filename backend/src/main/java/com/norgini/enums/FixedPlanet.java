@@ -15,6 +15,7 @@ public enum FixedPlanet {
     NETUNO(SweConst.SE_NEPTUNE, "Netuno"),
     PLUTAO(SweConst.SE_PLUTO, "Plutão"),
     NODO_VERDADEIRO(SweConst.SE_TRUE_NODE, "Nódulo Verdadeiro"),
+    CHIRON(SweConst.SE_CHIRON, "Quíron"),
     LILITH(SweConst.SE_MEAN_APOG, "Lilith (Lua Negra)"); 
 
     private final int id;
