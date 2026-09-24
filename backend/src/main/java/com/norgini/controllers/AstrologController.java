@@ -22,15 +22,21 @@ public class AstrologController {
 	private final AstrologService astrologyService;
 
 	@GetMapping("/planets")
-	public ResponseEntity<List<PlanetPositionResponse>> getAllPlanets(@RequestParam int day, @RequestParam int month,
-			@RequestParam int year, @RequestParam int hour, @RequestParam int minute) {
-
-		double defaultLatitude = -23.5333;
-		double defaultLongitude = -46.6167;
-
-		List<PlanetPositionResponse> result = astrologyService.getAllPlanets(day, month, year, hour, minute,
-				defaultLatitude, defaultLongitude);
-
+	public ResponseEntity<List<PlanetPositionResponse>> getAllPlanets(
+			@RequestParam int day, 
+			@RequestParam int month,
+			@RequestParam int year, 
+			@RequestParam int hour, 
+			@RequestParam int minute, 
+			@RequestParam String location) {
+		List<PlanetPositionResponse> result = astrologyService.getAllPlanets(day, month, year, hour, minute, location);
 		return ResponseEntity.ok(result);
 	}
+
+	@GetMapping("/locations")
+	public ResponseEntity<List<String>> getLocations(@RequestParam String query) {
+		List<String> suggestions = astrologyService.getLocationsSuggestions(query);
+		return ResponseEntity.ok(suggestions);
+	}
+
 }
