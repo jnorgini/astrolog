@@ -1,6 +1,9 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
-COPY . .
+
+ENV MAVEN_OPTS="-Xmx512m -XX:MaxMetaspaceSize=256m"
+
+COPY backend/ .
 
 RUN mvn install:install-file \
 	-Dfile=libs/swisseph-2.01.00-01.jar \
@@ -10,18 +13,14 @@ RUN mvn install:install-file \
 	-Dpackaging=jar \
 	-DgeneratePom=true
 
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests -B
 
-RUN rm -f target/*-plain.jar
-
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jre-jammy
 VOLUME /tmp
 WORKDIR /app
 
 COPY --from=build /app/src/main/resources/ephe/ ./ephe/
-
-COPY --from=build /app/target/*.jar ./app.jar
+COPY --from=build /app/target/*[^p][^l][^a][^i][^n].jar ./app.jar
 
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
