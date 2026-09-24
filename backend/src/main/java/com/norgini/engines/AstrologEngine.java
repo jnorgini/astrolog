@@ -1,6 +1,6 @@
 package com.norgini.engines;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,10 +33,12 @@ public class AstrologEngine {
 		SwissEph sw = new SwissEph();
 		try {
 			try {
-				String absolutePath = resourceLoader.getResource(ephePath).getFile().getAbsolutePath();
-				sw.swe_set_ephe_path(absolutePath);
-			} catch (IOException e) {
-				System.err.println("Erro ao carregar pasta de efemérides: " + e.getMessage());
+				File dockerDir = new File("/app/ephe/");
+				String path = (dockerDir.exists()) ? dockerDir.getAbsolutePath()
+						: resourceLoader.getResource(ephePath).getFile().getAbsolutePath();
+				sw.swe_set_ephe_path(path);
+			} catch (Exception e) {
+				System.err.println("Aviso ao carregar efemérides: " + e.getMessage());
 			}
 
 			double targetTime = TimeConverter.targetTime(day, month, year, hour, minute);
