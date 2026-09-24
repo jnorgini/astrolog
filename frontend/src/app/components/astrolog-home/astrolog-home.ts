@@ -1,7 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnDestroy } from '@angular/core';
 import { AstrologService } from '../../services/AstrologService';
 import { PlanetPositionResponse } from '../../models/planet-position.model';
-import { PLANET_SYMBOLS, ZODIAC_SYMBOLS } from '../../models/astrolog-symbols.constants';
+import { PLANET_SYMBOLS } from '../../models/astrolog-symbols.constants';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-astrolog-home',
@@ -9,7 +11,7 @@ import { PLANET_SYMBOLS, ZODIAC_SYMBOLS } from '../../models/astrolog-symbols.co
   templateUrl: './astrolog-home.html',
   styleUrl: './astrolog-home.css',
 })
-export class AstrologHome {
+export class AstrologHome implements OnDestroy {
   private readonly astrologService = inject(AstrologService);
   private readonly today = new Date();
 
@@ -20,21 +22,66 @@ export class AstrologHome {
   public readonly year = signal<number>(this.today.getFullYear());
   public readonly hour = signal<number>(this.today.getHours());
   public readonly minute = signal<number>(this.today.getMinutes());
-
-  // Novo Signal para controlar se o usuário sabe ou não o horário
+  public readonly location = signal<string>('');
   public readonly unknownTime = signal<boolean>(false);
-  // Controla visualmente se devemos sumir com a tabela de casas na resposta
   public readonly hasHiddenHouses = signal<boolean>(false);
 
   public readonly planetsResult = signal<PlanetPositionResponse[]>([]);
   public readonly isLoading = signal<boolean>(false);
   public readonly errorMessage = signal<string | null>(null);
 
+  public readonly suggestions = signal<string[]>([]);
+  public readonly showDropdown = signal<boolean>(false);
+
+  private readonly locationSearch$ = new Subject<string>();
+  private searchSubscription: Subscription;
+
+  constructor() {
+    this.searchSubscription = this.locationSearch$
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap((query) => this.astrologService.searchLocation(query)),
+      )
+      .subscribe({
+        next: (results) => {
+          this.suggestions.set(results);
+          this.showDropdown.set(results.length > 0);
+        },
+        error: () => this.suggestions.set([]),
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
+
+  public onLocationInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.location.set(value);
+    this.locationSearch$.next(value);
+  }
+
+  public selectLocation(selected: string): void {
+    this.location.set(selected);
+    this.showDropdown.set(false);
+  }
+
+  public hideDropdownDelayed(): void {
+    setTimeout(() => this.showDropdown.set(false), 250);
+  }
+
   public toggleUnknownTime(): void {
     this.unknownTime.set(!this.unknownTime());
+
     if (this.unknownTime()) {
       this.hour.set(12);
       this.minute.set(0);
+      this.location.set('');
+      this.suggestions.set([]);
+      this.showDropdown.set(false);
     } else {
       this.hour.set(this.today.getHours());
       this.minute.set(this.today.getMinutes());
@@ -42,13 +89,19 @@ export class AstrologHome {
   }
 
   public fetchAstrologyMap(): void {
+    if (!this.unknownTime() && !this.location().trim()) {
+      this.errorMessage.set('Por favor, digite uma localização.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.errorMessage.set(null);
-
     this.hasHiddenHouses.set(this.unknownTime());
 
+    const locationValue = this.unknownTime() ? 'Desconhecido' : this.location();
+
     this.astrologService
-      .getPlanets(this.day(), this.month(), this.year(), this.hour(), this.minute())
+      .getPlanets(this.day(), this.month(), this.year(), this.hour(), this.minute(), locationValue)
       .subscribe({
         next: (response) => {
           this.planetsResult.set(response);
