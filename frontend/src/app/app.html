@@ -1,14 +1,77 @@
-<div class="flex flex-col items-center justify-center h-screen bg-slate-900 text-white">
-  <div class="p-8 bg-slate-800 rounded-2xl shadow-xl border border-slate-700 text-center max-w-md">
-    <!-- CORREÇÃO: bg-linear-to-r remove o warning amarelo e aplica a transição perfeita em oklab -->
-    <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-purple-500 mb-4">
-      Astrolog Web ✨
-    </h1>
-    <p class="text-slate-400 mb-6">
-      Tailwind CSS v4 is up and running automatically inside the Angular project!
-    </p>
-    <button class="px-6 py-2.5 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 font-medium rounded-xl shadow-lg transition duration-200 active:scale-95 cursor-pointer">
-      Explore the Sky ♈
-    </button>
-  </div>
+<div class="flex flex-col min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-500/30">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+
+      <!-- LOGO -->
+      <div class="flex items-center gap-2 cursor-pointer group" routerLink="/">
+        <span
+          class="text-2xl bg-linear-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent font-black tracking-wider group-hover:opacity-90 transition">
+          ASTROLOG
+        </span>
+        <span class="text-lg animate-pulse">✨</span>
+      </div>
+
+      <!-- LINKS DA NAVBAR (DINÂMICOS E SUBUNHADOS) -->
+      <div class="flex items-center gap-6 text-sm font-medium text-slate-400">
+
+        <!-- Link para Trânsitos (Home) -->
+        <a routerLink="/" routerLinkActive="text-cyan-400 border-b-2 border-cyan-400"
+          [routerLinkActiveOptions]="{ exact: true }" class="hover:text-slate-200 transition pb-1 px-1 cursor-pointer">
+          Trânsitos
+        </a>
+
+        <!-- Link para Sobre -->
+        <a routerLink="/about" routerLinkActive="text-cyan-400 border-b-2 border-cyan-400"
+          class="hover:text-slate-200 transition pb-1 px-1 cursor-pointer">
+          Sobre
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO DINÂMICO -->
+  <main class="grow flex items-center justify-center py-10">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-slate-950 border-t border-slate-900 py-6 px-6 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+
+      <!-- DIREITOS AUTORAIS -->
+      <p>© {{ currentYear }} Astrolog. Desenvolvido com Angular & Spring Boot.</p>
+
+      <!-- NOVOS LINKS DE CONTATO COM ÍCONES -->
+      <div class="flex items-center gap-6 text-slate-400">
+
+        <!-- LINK WHATSAPP -->
+        <a href="https://wa.link/84yq3y" target="_blank"
+          class="flex items-center gap-1.5 hover:text-green-400 transition cursor-pointer">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.66.986 3.288 1.48 4.988 1.481 5.388 0 9.773-4.383 9.776-9.768.001-2.61-1.015-5.064-2.857-6.907C16.66 2.118 14.204 1 11.599 1c-5.392 0-9.777 4.384-9.782 9.77-.001 1.766.463 3.49 1.345 5.021l-.995 3.637 3.73-.978zm11.378-6.94c-.29-.145-1.716-.847-1.978-.942-.262-.096-.453-.145-.642.145-.19.29-.733.942-.899 1.133-.166.19-.332.213-.622.068-.29-.145-1.223-.45-2.328-1.434-.86-.767-1.44-1.716-1.608-2.006-.168-.29-.018-.446.128-.591.13-.13.29-.338.435-.507.145-.169.193-.29.29-.483.097-.193.048-.361-.025-.506-.072-.145-.642-1.546-.88-2.123-.23-.556-.465-.48-.642-.486-.165-.006-.355-.007-.546-.007-.191 0-.501.072-.763.36-.262.29-1.002.978-1.002 2.388 0 1.41 1.026 2.771 1.17 2.964.145.193 2.019 3.084 4.892 4.326.684.296 1.218.473 1.636.605.687.218 1.312.187 1.806.114.55-.082 1.716-.7 1.958-1.376.242-.676.242-1.256.17-1.376-.073-.12-.262-.193-.553-.338z" />
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+
+        <span>•</span>
+
+        <!-- LINK GITHUB -->
+        <a href="https://github.com/jnorgini" target="_blank"
+          class="flex items-center gap-1.5 hover:text-white transition cursor-pointer">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.164 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+              clip-rule="evenodd" />
+          </svg>
+          <span>GitHub</span>
+        </a>
+
+      </div>
+    </div>
+  </footer>
+
 </div>
