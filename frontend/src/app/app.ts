@@ -1,14 +1,16 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router'; 
+import { RouterOutlet } from '@angular/router';
+import { Navbar } from './components/navbar/navbar';
+import { Footer } from './components/footer/footer';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive], 
+  imports: [RouterOutlet, Navbar, Footer], 
   templateUrl: './app.html',
   styleUrl: './app.css'
-})
+}) 
 export class App {
   protected readonly title = signal('astrolog-frontend');
-  protected readonly currentYear = new Date().getFullYear();
+
 }

@@ -6,12 +6,12 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-astrolog-home',
+  selector: 'app-home',
   imports: [],
-  templateUrl: './astrolog-home.html',
-  styleUrl: './astrolog-home.css',
+  templateUrl: './home.html',
+  styleUrl: './home.css',
 })
-export class AstrologHome implements OnDestroy {
+export class Home implements OnDestroy {
   private readonly astrologService = inject(AstrologService);
   private readonly today = new Date();
 
