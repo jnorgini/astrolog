@@ -1,6 +1,7 @@
 package com.norgini.engines;
 
 import java.io.File;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.norgini.dtos.PlanetCalculationResult;
 import com.norgini.enums.FixedPlanet;
 import com.norgini.enums.ZodiacSign;
+import com.norgini.exceptions.InvalidAstrologDataException;
 
 import lombok.RequiredArgsConstructor;
 import swisseph.SweConst;
@@ -28,8 +30,14 @@ public class AstrologEngine {
 	@Value("${swisseph.ephe.path:classpath:ephe/}")
 	private String ephePath;
 
-	public List<PlanetCalculationResult> calculatePositions(int day, int month, int year, int hour, int minute,
-			double latitude, double longitude) {
+	public List<PlanetCalculationResult> calculatePositions(
+			int day, 
+			int month, 
+			int year, 
+			int hour, 
+			int minute,
+			double latitude, 
+			double longitude) {
 		SwissEph sw = new SwissEph();
 		try {
 			try {
@@ -40,8 +48,15 @@ public class AstrologEngine {
 			} catch (Exception e) {
 				System.err.println("Aviso ao carregar efemérides: " + e.getMessage());
 			}
+			double targetTime;
+			try {
+				targetTime = TimeConverter.targetTime(day, month, year, hour, minute);
+			} catch (DateTimeException e) {
+				throw new InvalidAstrologDataException(
+						"Estouro de calendário: A data ou hora fornecida é inválida para o fuso 'America/Sao_Paulo'.",
+						e);
+			}
 
-			double targetTime = TimeConverter.targetTime(day, month, year, hour, minute);
 			StringBuffer errMsg = new StringBuffer();
 			double[] cusps = new double[13];
 			double[] ascmc = new double[10];
@@ -49,12 +64,16 @@ public class AstrologEngine {
 
 			int flags = SweConst.SEFLG_SWIEPH | SweConst.SEFLG_SPEED;
 
-			List<PlanetCalculationResult> finalResult = new ArrayList<>(Stream.of(FixedPlanet.values()).map(planet -> {
+			List<PlanetCalculationResult> finalResult;
+
+			finalResult = new ArrayList<>(Stream.of(FixedPlanet.values()).map(planet -> {
 				double[] xp = new double[6];
 
 				if (sw.swe_calc_ut(targetTime, planet.getId(), flags, xp, errMsg) >= 0) {
-					int signIndex = (int) (xp[0] / 30) % 12;
-					String degrees = String.format("%.2f°", xp[0] % 30);
+					double fixedLongitude = xp[0] < 0 ? (xp[0] % 360) + 360 : xp[0];
+					int signIndex = (int) (fixedLongitude / 30) % 12;
+
+					String degrees = String.format("%.2f°", fixedLongitude % 30);
 					int house = HouseDetector.findHouseForPlanet(xp[0], cusps);
 
 					return new PlanetCalculationResult(planet, ZodiacSign.getByIndex(signIndex), degrees, house,
@@ -62,15 +81,18 @@ public class AstrologEngine {
 				}
 				return null;
 			}).filter(Objects::nonNull).toList());
+			IntStream.rangeClosed(1, 12).mapToObj(i -> {
+				double fixedCusp = cusps[i] < 0 ? (cusps[i] % 360) + 360 : cusps[i];
+				return AstrologFactory.createHouse(i, fixedCusp);
+			}).forEach(finalResult::add);
 
-			IntStream.rangeClosed(1, 12).mapToObj(i -> AstrologFactory.createHouse(i, cusps[i]))
-					.forEach(finalResult::add);
-
-			finalResult.add(0, AstrologFactory.createAscendant(ascmc[0]));
+			double fixedAsc = ascmc[0] < 0 ? (ascmc[0] % 360) + 360 : ascmc[0];
+			finalResult.add(0, AstrologFactory.createAscendant(fixedAsc));
 
 			return finalResult;
 		} finally {
 			sw.swe_close();
 		}
 	}
+	
 }
