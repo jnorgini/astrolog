@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.norgini.dtos.AstrologQueryParams;
 import com.norgini.dtos.PlanetPositionResponse;
 import com.norgini.services.AstrologService;
 
@@ -22,9 +23,15 @@ public class AstrologController {
 	private final AstrologService astrologyService;
 
 	@GetMapping("/planets")
-	public ResponseEntity<List<PlanetPositionResponse>> getAllPlanets(@RequestParam int day, @RequestParam int month,
-			@RequestParam int year, @RequestParam int hour, @RequestParam int minute, @RequestParam String location) {
-		List<PlanetPositionResponse> result = astrologyService.getAllPlanets(day, month, year, hour, minute, location);
+	public ResponseEntity<List<PlanetPositionResponse>> getAllPlanets(@jakarta.validation.Valid AstrologQueryParams params) {
+		List<PlanetPositionResponse> result = astrologyService.getAllPlanets(
+				params.day(), 
+				params.month(), 
+				params.year(), 
+				params.hour(), 
+				params.minute(), 
+				params.location()
+		);
 		return ResponseEntity.ok(result);
 	}
 
