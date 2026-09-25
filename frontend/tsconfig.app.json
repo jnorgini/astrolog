@@ -4,10 +4,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-<<<<<<< HEAD
-=======
     "rootDir": "src",
->>>>>>> 85b033ab24151c9d97a2f9f78a9e32d7cd3a5fc1
     "types": []
   },
   "include": [
