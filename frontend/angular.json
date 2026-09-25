@@ -24,13 +24,7 @@
                 "input": "public"
               }
             ],
-<<<<<<< HEAD
-            "styles": [
-              "src/styles.css"
-            ]
-=======
             "styles": ["src/styles.css"]
->>>>>>> 85b033ab24151c9d97a2f9f78a9e32d7cd3a5fc1
           },
           "configurations": {
             "production": {
@@ -51,9 +45,6 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-<<<<<<< HEAD
-              "sourceMap": true
-=======
               "sourceMap": true,
               "fileReplacements": [
                 {
@@ -61,7 +52,6 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
->>>>>>> 85b033ab24151c9d97a2f9f78a9e32d7cd3a5fc1
             }
           },
           "defaultConfiguration": "production"
