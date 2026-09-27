@@ -99,7 +99,7 @@
         </div>
         }
 
-             <!-- TABELAS RESPONSIVAS -->
+        <!-- TABELAS RESPONSIVAS -->
         @if (planetsResult().length > 0) {
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 mt-6 border-t border-slate-700/60 pt-5 text-left">
 
@@ -130,10 +130,10 @@
                                         {{ planetIcons[item.planet] || '' }}
                                     </span>
                                     <span>{{ item.planet }}</span>
-
                                     <!-- BADGE DA FASE DA LUA -->
-                                    @if (item.planet === 'Lua' && item.moonPhase) {
-                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-md uppercase tracking-wide select-none">
+                                    @if (item.planet === 'Lua' && item.moonPhase && unknownTime()) {
+                                    <span
+                                        class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[8px] font-bold bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-md uppercase tracking-wide select-none">
                                         <span>{{ moonPhaseIcons[item.moonPhase] || '🌙' }}</span>
                                         <span>{{ item.moonPhase }}</span>
                                     </span>
@@ -152,13 +152,14 @@
                                 [class.text-slate-500]="item.movement === 'direto'">
                                 {{ item.movement || '—' }}
                             </td>
+
                         </tr>
+
                         }
                         }
                     </tbody>
                 </table>
             </div>
-
 
             <!-- SUBTABELA 2: AS 12 CASAS -->
             @if (!hasHiddenHouses()) {
@@ -172,46 +173,23 @@
                             <th class="p-2.5 sm:p-3 pr-4">Graus</th>
                         </tr>
                     </thead>
-                  <tbody class="divide-y divide-slate-800/60 text-[11px] sm:text-xs font-medium">
-    @for (item of planetsResult(); track item.planet) {
-    @if (!item.planet.startsWith('Casa') && item.planet !== 'Ascendente') {
-    <tr class="hover:bg-slate-800/30 transition">
-        
-        <!-- COLUNA DO ASTRO CORRIGIDA -->
-        <td class="p-2.5 sm:p-3 pl-4 text-slate-200 font-semibold truncate">
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="text-slate-400 font-normal select-none text-xs sm:text-sm">
-                    {{ planetIcons[item.planet] || '' }}
-                </span>
-                <span>{{ item.planet }}</span>
-
-                <!-- BADGE DINÂMICA DA FASE DA LUA -->
-                @if (item.planet === 'Lua' && item.moonPhase) {
-                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-md uppercase tracking-wide select-none">
-                    <span>{{ moonPhaseIcons[item.moonPhase] || '🌙' }}</span>
-                    <span>{{ item.moonPhase }}</span>
-                </span>
-                }
-            </div>
-        </td>
-        
-        <td class="p-2.5 sm:p-3 text-slate-300 truncate">{{ item.zodiacSign }}</td>
-        <td class="p-2.5 sm:p-3 text-cyan-400 font-mono whitespace-nowrap">{{ item.degrees }}</td>
-        @if (!hasHiddenHouses()) {
-        <td class="p-2.5 sm:p-3 text-slate-400 font-medium truncate">
-            {{ item.house ? 'na casa ' + item.house : '—' }}
-        </td>
-        }
-        <td class="p-2.5 sm:p-3 pr-4 text-right font-mono text-[9px] sm:text-[10px] uppercase font-bold tracking-wider whitespace-nowrap"
-            [class.text-amber-400]="item.movement === 'retrógrado'"
-            [class.text-slate-500]="item.movement === 'direto'">
-            {{ item.movement || '—' }}
-        </td>
-    </tr>
-    }
-    }
-</tbody>
-
+                    <tbody class="divide-y divide-slate-800/60 text-[11px] sm:text-xs font-medium text-slate-300">
+                        @for (item of planetsResult(); track item.planet) {
+                        @if (item.planet.startsWith('Casa')) {
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="p-2.5 sm:p-3 pl-4 text-slate-400 truncate">
+                                {{ item.planet }}
+                            </td>
+                            <td class="p-2.5 sm:p-3 text-slate-200 font-semibold truncate">
+                                {{ item.zodiacSign }}
+                            </td>
+                            <td class="p-2.5 sm:p-3 pr-4 text-cyan-400 font-mono whitespace-nowrap">
+                                {{ item.degrees }}
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
                 </table>
             </div>
             }
