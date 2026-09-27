@@ -9,7 +9,7 @@ public record PlanetCalculationResult(
 		String degrees, 
 		Integer house,
 		boolean isRetrograde, 
-		String customName) {
+		String moonPhase) {
 	public PlanetCalculationResult(FixedPlanet planet, ZodiacSign zodiacSign, String degrees) {
 		this(planet, zodiacSign, degrees, null, false, null);
 	}

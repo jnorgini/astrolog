@@ -130,6 +130,14 @@
                                         {{ planetIcons[item.planet] || '' }}
                                     </span>
                                     <span>{{ item.planet }}</span>
+                                    <!-- BADGE DA FASE DA LUA -->
+                                    @if (item.planet === 'Lua' && item.moonPhase && unknownTime()) {
+                                    <span
+                                        class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[8px] font-bold bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-md uppercase tracking-wide select-none">
+                                        <span>{{ moonPhaseIcons[item.moonPhase] || '🌙' }}</span>
+                                        <span>{{ item.moonPhase }}</span>
+                                    </span>
+                                    }
                                 </div>
                             </td>
                             <td class="p-2.5 sm:p-3 text-slate-300 truncate">{{ item.zodiacSign }}</td>
@@ -144,7 +152,9 @@
                                 [class.text-slate-500]="item.movement === 'direto'">
                                 {{ item.movement || '—' }}
                             </td>
+
                         </tr>
+
                         }
                         }
                     </tbody>

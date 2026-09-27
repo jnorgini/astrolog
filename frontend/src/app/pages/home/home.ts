@@ -17,6 +17,13 @@ export class Home implements OnDestroy {
 
   public readonly planetIcons = PLANET_SYMBOLS;
 
+   public readonly moonPhaseIcons: Record<string, string> = {
+    'Nova': '🌑',
+    'Crescente': '🌓',
+    'Cheia': '🌕',
+    'Minguante': '🌗'
+  };
+
   public readonly day = signal<number>(this.today.getDate());
   public readonly month = signal<number>(this.today.getMonth() + 1);
   public readonly year = signal<number>(this.today.getFullYear());

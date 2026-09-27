@@ -4,4 +4,5 @@ export interface PlanetPositionResponse {
   degrees: string;
   house: string; 
   movement: string; 
+  moonPhase: string;
 }
