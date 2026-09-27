@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.norgini.dtos.PlanetCalculationResult;
 import com.norgini.enums.FixedPlanet;
+import com.norgini.enums.MoonPhase;
 import com.norgini.enums.ZodiacSign;
 import com.norgini.exceptions.InvalidAstrologDataException;
 
@@ -64,6 +65,8 @@ public class AstrologEngine {
 
 			int flags = SweConst.SEFLG_SWIEPH | SweConst.SEFLG_SPEED;
 
+			final double[] sunLongitudeHolder = new double[1];
+
 			List<PlanetCalculationResult> finalResult;
 
 			finalResult = new ArrayList<>(Stream.of(FixedPlanet.values()).map(planet -> {
@@ -75,9 +78,25 @@ public class AstrologEngine {
 
 					String degrees = String.format("%.2f°", fixedLongitude % 30);
 					int house = HouseDetector.findHouseForPlanet(xp[0], cusps);
+					
+					String customNameValue = null;
 
+					if (planet == FixedPlanet.SOL) {
+						sunLongitudeHolder[0] = fixedLongitude;
+					} else if (planet == FixedPlanet.LUA) {
+
+						if (sunLongitudeHolder[0] == 0) {
+							double[] sunXp = new double[6];
+							if (sw.swe_calc_ut(targetTime, FixedPlanet.SOL.getId(), flags, sunXp, errMsg) >= 0) {
+								sunLongitudeHolder[0] = sunXp[0] < 0 ? (sunXp[0] % 360) + 360 : sunXp[0];
+							}
+						}
+						double diffAngle = fixedLongitude - sunLongitudeHolder[0];
+						MoonPhase phase = MoonPhase.fromDegrees(diffAngle);
+						customNameValue = phase.getDisplayName();
+					}
 					return new PlanetCalculationResult(planet, ZodiacSign.getByIndex(signIndex), degrees, house,
-							xp[3] < 0, null);
+							xp[3] < 0, customNameValue);
 				}
 				return null;
 			}).filter(Objects::nonNull).toList());

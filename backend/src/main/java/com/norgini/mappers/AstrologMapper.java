@@ -13,10 +13,14 @@ public class AstrologMapper {
 			return new PlanetPositionResponse(
 					record.planet().getDisplayName(), 
 					record.zodiacSign().getDisplayName(),
-					record.degrees(), String.valueOf(record.house()), movement);
+					record.degrees(), String.valueOf(record.house()), movement, record.moonPhase());
 		}
-		return new PlanetPositionResponse(record.customName(), record.zodiacSign().getDisplayName(), record.degrees(),
-				"", "");
+
+		return new PlanetPositionResponse(
+				record.moonPhase(), 
+				record.zodiacSign().getDisplayName(), 
+				record.degrees(),
+				"", "", null);
 	}
-	
+
 }
