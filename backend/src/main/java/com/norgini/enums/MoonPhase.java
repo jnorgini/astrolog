@@ -1,6 +1,7 @@
 package com.norgini.enums;
 
 public enum MoonPhase {
+	
 	NOVA("Nova"), 
 	CRESCENTE("Crescente"), 
 	CHEIA("Cheia"), 

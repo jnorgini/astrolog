@@ -1,6 +1,7 @@
 package com.norgini.enums;
 
 public enum ZodiacSign {
+	
 	ARIES("Áries"), 
 	TAURUS("Touro"), 
 	GEMINI("Gêmeos"), 
