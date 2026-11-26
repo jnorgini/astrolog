@@ -38,7 +38,7 @@ src/main/java/com/norgini
     │   └── out/
     │       ├── ephemeris/   # Adaptador da Swiss Ephemeris (SwissEphAstrologyAdapter)
     │       └── geocoding/   # Adaptador de geolocalização (PhotonGeocodingAdapter)
-    └── config/              # Injeção de dependências (@Bean) e configuração de CORS
+    └── config/              # Injeção de dependências (@Bean), configuração de CORS e Swagger (OpenAPI)
 ```
 
 ### Front-end (`frontend/`)
@@ -71,6 +71,8 @@ Acesse a aplicação em `http://localhost:4200`.
 ---
 
 ## 📡 Endpoints da API
+
+A documentação interativa da API está disponível via **Swagger UI (OpenAPI)** em `http://localhost:8080/swagger-ui.html`.
 
 | Método | Rota | Descrição |
 | :--- | :--- | :--- |
